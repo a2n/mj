@@ -2,12 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-struct _List
-{
-    unsigned int * value;
-    struct _List * next;
-};
-
 typedef struct _List List;
 
 unsigned int base[] = 
@@ -22,38 +16,23 @@ unsigned int base[] =
 
 int main (int argc, char* argv[])
 {
-    List * table = (List *) malloc (5 * sizeof(List));
-    
+    unsigned int ** table = (unsigned int**) malloc(sizeof(unsigned int*) * 36);
     int i = 0;
-    for (; i < 35; ++i)
+    for (; i < 36; ++i)
     {
-	table[i].value = &base[i];
-	table[i].next = &table[i - 1];
+	table[i] = &base[i];
     }
 
     srand(time(NULL));
 
-    int times = 0;
     i = 0;
-    /*
-     * Pick up one number and remove it, then
-     * move the last one to the hole, and set
-     * the new-last-one next pointer to NULL..
-     */
     while (35 > i)
     {
-	++times;
-	unsigned int loc = rand() % 36 - i;
-	printf("loc: %d, ", loc);
-	printf("%d, ", *table[loc].value);
-	printf("\n");
-	table[i - 1].next = &table[i + 1];
-	*table[i].value = 0;
-	table[i].next = NULL;
 	++i;
+	unsigned int loc = rand() % (36 - i);
+	printf("%d\t(%p)\n", *table[loc], table[loc]);
+	table[loc] = table[36 - i];
     }
-
-    printf("times: %d\n", times);
 
     return EXIT_SUCCESS;
 }
